@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="version.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="version.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+		<ItemGroup>
+				<PackageReference Include="AutoMapper" Version="11.0.1" />
+				<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+				<PackageReference Include="FluentValidation" Version="11.1.0" />
+				<PackageReference Include="FluentValidation.AspNetCore" Version="11.1.2" />
+				<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
+				<PackageReference Include="Nerdbank.GitVersioning" Version="3.5.108">
+						<PrivateAssets>all</PrivateAssets>
+						<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+				</PackageReference>
+		</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotelRentalManager.Authentication\HotelRentalManager.Authentication.csproj" />
+    <ProjectReference Include="..\HotelRentalManager.DataAccessLayer\HotelRentalManager.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\HotelRentalManager.Shared\HotelRentalManager.Shared.csproj" />
+    <ProjectReference Include="..\HotelRentalManager.StorageProviders\HotelRentalManager.StorageProviders.csproj" />
+  </ItemGroup>
+
+</Project>
