@@ -1,25 +1,53 @@
+using Hellang.Middleware.ProblemDetails;
+using HotelRentalManager.BusinessLayer.Extensions;
+using HotelRentalManager.BusinessLayer.Services;
+using HotelRentalManager.BusinessLayer.Services.Interfaces;
+using HotelRentalManager.BusinessLayer.Settings;
+using HotelRentalManager.Contracts;
+using HotelRentalManager.Extensions;
+using HotelRentalManager.Services;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+var jwtSettings = Configure<JwtSettings>(nameof(JwtSettings));
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
+});
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddProblemDetails();
+builder.Services.AddMapperProfiles();
+builder.Services.AddValidators();
+builder.Services.AddSwaggerSettings();
+
+string connectionString = builder.Configuration.GetConnectionString("SqlConnection");
+builder.Services.AddDataContext(connectionString);
+
+builder.Services.AddIdentitySettings(jwtSettings);
+
+builder.Services.AddScoped<IUserService, HttpUserService>();
+builder.Services.AddScoped<IAuthenticatedService, AuthenticatedService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
+T Configure<T>(string sectionName) where T : class
+{
+    var section = builder.Configuration.GetSection(sectionName);
+    var settings = section.Get<T>();
+    builder.Services.Configure<T>(section);
+    return settings;
 }
 
+var app = builder.Build();
+app.UseProblemDetails();
+app.UseSwaggerSettings();
+app.UseSerilogRequestLogging(options =>
+{
+    options.IncludeQueryInRequestPath = true;
+});
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+app.UseRouting();
+app.UseIdentitySettings();
 app.MapControllers();
-
-app.Run();
+await app.RunAsync();
