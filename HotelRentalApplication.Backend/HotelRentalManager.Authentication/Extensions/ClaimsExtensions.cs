@@ -16,9 +16,14 @@ public static class ClaimsExtensions
         return Guid.Empty;
     }
 
-    public static string GetName(this IPrincipal user)
+    public static string GetFirstName(this IPrincipal user)
     {
         return GetClaimValueInternal(user, ClaimTypes.GivenName);
+    }
+
+    public static string GetLastName(this IPrincipal user)
+    {
+        return GetClaimValueInternal(user, ClaimTypes.Surname);
     }
 
     public static DateTime GetDateOfBirth(this IPrincipal user)
