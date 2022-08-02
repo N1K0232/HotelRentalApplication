@@ -1,11 +1,21 @@
-﻿using HotelRentalManager.Authentication.Extensions;
+﻿using HotelRentalManager.Authentication.Entities;
+using HotelRentalManager.Authentication.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace HotelRentalManager.Authentication;
 
-public sealed class AuthenticationDataContext : IdentityDbContext
+public sealed class AuthenticationDataContext
+	: IdentityDbContext<ApplicationUser,
+	  ApplicationRole,
+	  Guid,
+	  IdentityUserClaim<Guid>,
+	  ApplicationUserRole,
+	  IdentityUserLogin<Guid>,
+	  IdentityRoleClaim<Guid>,
+	  IdentityUserToken<Guid>>
 {
 	public AuthenticationDataContext(DbContextOptions<AuthenticationDataContext> options)
 		: base(options)
@@ -15,10 +25,7 @@ public sealed class AuthenticationDataContext : IdentityDbContext
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
-
-		Assembly assembly = Assembly.GetExecutingAssembly();
-		builder.ApplyConfigurationsFromAssembly(assembly);
-
+		builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 		builder.ApplyTrimStringConverter();
 	}
 }
