@@ -1,4 +1,6 @@
 ﻿using HotelRentalManager.Abstractions.Controllers;
+using HotelRentalManager.Abstractions.Filters;
+using HotelRentalManager.Authentication;
 using HotelRentalManager.Authentication.Extensions;
 using HotelRentalManager.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +10,7 @@ namespace HotelRentalManager.Controllers;
 public class MeController : ApiController
 {
     [HttpGet("GetMe")]
+    [RoleAuthorize(RoleNames.Administrator, RoleNames.PowerUser, RoleNames.User)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
