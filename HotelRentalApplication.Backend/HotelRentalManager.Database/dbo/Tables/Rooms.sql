@@ -2,7 +2,7 @@
     [Id]               UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL,
     [HotelId]          UNIQUEIDENTIFIER NOT NULL,
     [Number]           INT              NOT NULL,
-    [MaxMembersCount]  INT              NOT NULL,
+    [MaxMembersNumber] INT              NOT NULL,
     [CreatedDate]      DATETIME         NOT NULL,
     [LastModifiedDate] DATETIME         NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
