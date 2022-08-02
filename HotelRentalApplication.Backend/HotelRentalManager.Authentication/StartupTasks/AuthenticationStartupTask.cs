@@ -55,6 +55,8 @@ public sealed class AuthenticationStartupTask : BackgroundService
             UserName = "N1K0232",
         };
 
+        user.Age = Convert.ToInt32((DateTime.UtcNow.Date - user.DateOfBirth).TotalDays / 365);
+
         await CheckCreateUserAsync(user, "NicoSilve22!", RoleNames.Administrator, RoleNames.PowerUser, RoleNames.User);
 
         async Task CheckCreateUserAsync(ApplicationUser user, string password, params string[] roles)
